@@ -48,6 +48,7 @@ help:
 
 clean:
 	rm -rf $(BUILDDIR)/*
+	(cd codes; $(MAKE) clean-tmp )
 
 prep:
 	(cd codes; $(MAKE) )
