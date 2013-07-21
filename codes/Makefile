@@ -26,7 +26,13 @@ IEXSRC = arithmetic_operations.exs \
 	pipeline_flatten_and_double2.exs \
 	rebinding.exs \
 	receive_syntax.exs \
-	tuple_data_type.exs
+	tuple_data_type.exs \
+	record_is_tuple.exs \
+	record_update.exs \
+	record_block.exs \
+	record_access.exs \
+	protocol_blank.exs 
+
 
 TARGET=$(IEXSRC:.exs=.lst) $(SHSRC:.sh=.lst)
 
@@ -39,7 +45,7 @@ TARGET=$(IEXSRC:.exs=.lst) $(SHSRC:.sh=.lst)
 all: $(TARGET)
 
 clean-tmp:
-	-rm $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp)
+	-rm $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
 
 clean: 
 	-rm $(TARGET) $(IEXSRC:.exs=.cmd)
