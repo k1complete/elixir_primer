@@ -31,7 +31,10 @@ IEXSRC = arithmetic_operations.exs \
 	record_update.exs \
 	record_block.exs \
 	record_access.exs \
-	protocol_blank.exs 
+	protocol_blank.exs \
+	stream_map_take_map.exs \
+	enum_map_take_map.exs 
+
 
 
 TARGET=$(IEXSRC:.exs=.lst) $(SHSRC:.sh=.lst)
