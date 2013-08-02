@@ -33,7 +33,17 @@ IEXSRC = arithmetic_operations.exs \
 	record_access.exs \
 	protocol_blank.exs \
 	stream_map_take_map.exs \
-	enum_map_take_map.exs 
+	enum_map_take_map.exs \
+	quote_do_sum.exs \
+	quote_do_plus.exs \
+	quote_literal.exs \
+	defmacro_unless.exs \
+	defmacro_unless_fail.exs \
+	unquote_splicing.exs \
+	hygiene.exs \
+	defmacro_plus.exs \
+	private_macro.exs \
+	delegate.exs
 
 
 
