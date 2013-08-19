@@ -22,15 +22,27 @@ elixirは関数を便利に使うための構文をサポートしています�
 上の例のsize(&1)はfn(x) -> size(x) endに直接変換されます。演算子もまた
 関数呼び出しですので、同じシンタックスを使うことができます。
 
-.. literalinclude:: ../codes/list_rescue_partial_app.lst
+.. literalinclude:: ../codes/list_resuce_partial_app.lst
    :language: elixir
    :linenos:
+   :lines: 1-2
+
 
 このケースでは、&1 * &2 はその順番の引数として自動生成された関数にマッピ
 ングされます。つまりは fn(x1, x2) -> x1 + x2 end と同じです。
 
+.. literalinclude:: ../codes/list_resuce_partial_app.lst
+   :language: elixir
+   :linenos:
+   :lines: 3-4
+
+
+全く同じことを&()で囲うことでより明示的に記述することができます。
+
 この部分適用シンタックスはElixirではSpecialform以外の任意の関数、マクロ、
 演算子で使用することができます。
+
+
 
 パイプライン
 -------------------------------------
