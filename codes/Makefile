@@ -62,4 +62,4 @@ clean-tmp:
 	-rm -f $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
 
 clean: 
-	-rm -f $(TARGET) $(IEXSRC:.exs=.cmd)
+	-rm -f $(TARGET) $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
