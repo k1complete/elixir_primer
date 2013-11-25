@@ -59,7 +59,7 @@ TARGET=$(IEXSRC:.exs=.lst) $(SHSRC:.sh=.lst)
 all: $(TARGET)
 
 clean-tmp:
-	-rm $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
+	-rm -f $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
 
 clean: 
-	-rm $(TARGET) $(IEXSRC:.exs=.cmd)
+	-rm -f $(TARGET) $(IEXSRC:.exs=.cmd)
