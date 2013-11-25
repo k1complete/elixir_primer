@@ -32,6 +32,7 @@ IEXSRC = arithmetic_operations.exs \
 	record_block.exs \
 	record_access.exs \
 	protocol_blank.exs \
+	protocol_blank_any.exs \
 	stream_map_take_map.exs \
 	enum_map_take_map.exs \
 	quote_do_sum.exs \
