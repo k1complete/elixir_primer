@@ -28,12 +28,12 @@ elixirはレコードとプロトコルの両方を提供します。この章�
    :linenos:
 
     iex> file_info = FileInfo.new(atime: :erlang.now())
-    {FileInfo,0,{1335,14082,453196},nil} 
+    {FileInfo,0,{1335,14082,453196},nil}
     iex> file_info.atime  #=> getter
     {1335,14082,453196}
     iex> file_info.atime(:erlang.now()) #=> setter
     {FileInfo,0,{1335,14267,998607},nil}
-    iex> 
+    iex>
 
 elixirは一つの引数をとるupdate_#{field}関数も定義しています。update関数
 が呼ばれると、フィールドの現在の値を関数に渡します。関数からの戻り値で
@@ -46,7 +46,7 @@ elixirは一つの引数をとるupdate_#{field}関数も定義しています�
     20
     iex> file_info = file_info.update_access(fn(x) -> x+10 end)
     {FileInfo,30,{1335,16186,476731},nil}
-    iex> file_info.access                                      
+    iex> file_info.access
     30
     iex>
 
@@ -64,7 +64,7 @@ elixirは一つの引数をとるupdate_#{field}関数も定義しています�
 
 
     defrecord RecordName, [attribute: initialvalue], [:do, block]
- 
+
 do: その他の任意のブロックを記述可能です。たとえば、各種メソッドを
     定義することができます。第一引数は対象のレコード自身となります。
 
@@ -119,19 +119,19 @@ Blankプロトコルで、blank?/1関数をサポートする事を要求する�
 .. literalinclude:: ../codes/protocol_blank.lst
    :language: elixir
    :linenos:
-   :lines: 18-34
+   :lines: 19-35
 
 
 のようになり、Listについてはblank?が機能していますが、blank?(1)は
-怒られました。しかたないのでNumber型についても実装を定義してみます。
+怒られました。しかたないのでInteger型についても実装を定義してみます。
 
 .. literalinclude:: ../codes/protocol_blank.lst
    :language: elixir
-   :linenos: 
+   :linenos:
    :lines: 36-48
 
 
-このように数値についてもblank?/1が機能するようになりました。:forに使え
+このように整数についてもblank?/1が機能するようになりました。:forに使え
 る型は以下のとおりです。
 
 • Record
@@ -144,7 +144,9 @@ Blankプロトコルで、blank?/1関数をサポートする事を要求する�
 
 • BitString
 
-• Number
+• Integer
+
+• Float
 
 • Function
 
@@ -156,7 +158,10 @@ Blankプロトコルで、blank?/1関数をサポートする事を要求する�
 
 • Any
 
-@onlyに型名を明示することで必要のない型についての実装を少しの労力で行う
-ことができます。Number, Functionなどは決してblankに並ないので、そのため
-にAnyを使って纏めて実装することができます。
+
+デフォルトの実装を与えたい場合は、@fallback_to_anyにtrueをセットしAny型について実装しましょう。
+
+.. literalinclude:: ../codes/protocol_blank_any.lst
+   :language: elixir
+   :linenos:
 

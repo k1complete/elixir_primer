@@ -32,6 +32,7 @@ IEXSRC = arithmetic_operations.exs \
 	record_block.exs \
 	record_access.exs \
 	protocol_blank.exs \
+	protocol_blank_any.exs \
 	stream_map_take_map.exs \
 	enum_map_take_map.exs \
 	quote_do_sum.exs \
@@ -59,7 +60,7 @@ TARGET=$(IEXSRC:.exs=.lst) $(SHSRC:.sh=.lst)
 all: $(TARGET)
 
 clean-tmp:
-	-rm $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
+	-rm -f $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~
 
 clean: 
-	-rm $(TARGET) $(IEXSRC:.exs=.cmd)
+	-rm -f $(TARGET) $(IEXSRC:.exs=.cmd) $(TARGET:.lst=.tmp) *~

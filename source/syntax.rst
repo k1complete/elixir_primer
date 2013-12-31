@@ -63,9 +63,9 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
 
 二重引用符はUTF-8の文字列 [#erlang_binary]_ になります。単一引用符の文字列
 はunicode文字(ucs2)のリスト [#erlang_string]_ になり、両者は全く違います。
-binary_to_list/1 により文字列をリストに変換するとUTF-8のバイトのリストとな
+:binary.bin_to_list/1 により文字列をリストに変換するとUTF-8のバイトのリストとな
 るため、違いが明らかになります。UTF-8のバイナリをunicode文字のリストに
-変換するためには、:unicode.characters_to_list/1を使います。
+変換するためには、String.to_char_list/1を使います。
 
 .. literalinclude:: ../codes/binary_and_list.lst
    :language: elixir

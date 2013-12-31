@@ -8,7 +8,7 @@ end
 Blank.blank?([])
 Blank.blank?([1])
 Blank.blank?(1)
-defimpl Blank, for: Number do
+defimpl Blank, for: Integer do
   def blank?(_), do: true
 end
 Blank.blank?(0)

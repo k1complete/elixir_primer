@@ -1,1 +1,1 @@
-Enum.map(List.flatten([1, [2], 3]), &1 * 2)
+Enum.map(List.flatten([1, [2], 3]), &(&1 * 2))

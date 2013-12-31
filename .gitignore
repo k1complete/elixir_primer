@@ -1,0 +1,4 @@
+/build
+/codes/*.tmp
+/codes/*.cmd
+/codes/*.lst
