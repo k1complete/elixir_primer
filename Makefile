@@ -187,3 +187,6 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+publish:
+	scp -r build/html ns.maqcsa.org:/var/www/html/elixir_primer
