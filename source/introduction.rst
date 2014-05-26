@@ -53,8 +53,6 @@ https://github.com/josevalim/elixir から入手できます。2014年6月時点
 語に生まれ変わりました。それ以前のelixirはreiaと同様にerlang上で動作す
 るruby類似のオブジェクト指向言語でした。
 
-.. code-block:: bash
-
 .. runblock:: citty
 
     $ elixir --version
