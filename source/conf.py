@@ -30,12 +30,11 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sp
 
 autorun_languages = {}
 autorun_languages['gnuplot'] = 'gnuplot'
-autorun_languages['citty'] = "bash mm"
-#autorun_languages['citty'] = 'tee log'
-autorun_languages['citty_input_encoding'] = 'utf-8'
-autorun_languages['citty_output_encoding'] = 'utf-8'
-autorun_languages['citty_prefix_chars'] = 0
-autorun_languages['citty_show_source'] = False
+autorun_languages['bash'] = "ext/citty/src/citty -f10 -b bash -i"
+autorun_languages['bash_input_encoding'] = 'utf-8'
+autorun_languages['bash_output_encoding'] = 'utf-8'
+autorun_languages['bash_prefix_chars'] = 0
+autorun_languages['bash_show_source'] = False
 
 autorun_languages['iex'] = "ext/citty/src/citty -f10 -b iex"
 autorun_languages['iex_input_encoding'] = 'utf-8'

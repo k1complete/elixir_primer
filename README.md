@@ -12,10 +12,14 @@ eixirの入門書をsphinxで買いてみています。
 ビルド方法
 ----------
 
-elixirとexpectが必要ですので事前にインストールしておくことが必要です。
+elixirが必要ですので事前にインストールしておきます。
+
+また、sphinx-contrib/autorunとk1complete/cittyが依存しています。
+autorunはsphinxビルド時にrunblockを任意のプログラムの標準入力として
+実行した結果に置き換える拡張で、cittyは標準入力を疑似端末として
+任意の対話型プログラムに送り、自動で対話するプログラムです。
 
 % make html
-
 
 
 

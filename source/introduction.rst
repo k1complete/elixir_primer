@@ -53,7 +53,7 @@ https://github.com/josevalim/elixir から入手できます。2014年6月時点
 語に生まれ変わりました。それ以前のelixirはreiaと同様にerlang上で動作す
 るruby類似のオブジェクト指向言語でした。
 
-.. runblock:: citty
+.. runblock:: bash
 
     $ elixir --version
 
@@ -90,7 +90,7 @@ rubyなどを知っていれば受け入れやすい文法と構造になって�
 
 これをhello.exsとして保存し、elixirへ渡すと実行されます。
 
-.. runblock:: citty
+.. runblock:: bash
 
    $ elixir hello.exs
 
