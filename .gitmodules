@@ -1,0 +1,8 @@
+[submodule "ext/citty"]
+	path = ext/citty
+	url = https://github.com/k1complete/citty
+	branch = master
+[submodule "ext/sphinx-contrib"]
+	path = ext/sphinx-contrib
+	url = https://github.com/thewtex/sphinx-contrib
+	branch = master

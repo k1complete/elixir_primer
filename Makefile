@@ -50,18 +50,23 @@ clean:
 	rm -rf $(BUILDDIR)/*
 	(cd codes; $(MAKE) clean )
 
-CITTY = source/exts/citty
+CITTY = ext/citty
+
+$(CITTY)/configure:
+	(cd $(CITTY); sh ./autogen.sh; )
 
 $(CITTY)/Makefile: $(CITTY)/configure
-	(cd $(CITTY); ./configure;)
+	(cd $(CITTY);  ./configure;)
 
 $(CITTY)/src/citty: 
 	(cd $(CITTY); $(MAKE);)
 
 prep:	
-	(cd codes; $(MAKE))
+	echo ok
 
-html:	prep  $(CITTY)/Makefile $(CITTY)/src/citty
+#	(cd codes; $(MAKE))
+
+html:	$(CITTY)/Makefile $(CITTY)/src/citty
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
