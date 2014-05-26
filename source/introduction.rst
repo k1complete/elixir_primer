@@ -92,7 +92,7 @@ rubyなどを知っていれば受け入れやすい文法と構造になって�
 
 .. runblock:: bash
 
-   $ elixir hello.exs
+   $ elixir codes/hello.exs
 
 
 
