@@ -13,6 +13,7 @@ Elixir Primer
 
    introduction
    syntax
+   map_and_struct
    record_and_protocol
    partial_application
    metaprogramming

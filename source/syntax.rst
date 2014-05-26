@@ -10,9 +10,16 @@
 
 基本データタイプは以下のとおりです。
 
-.. literalinclude:: ../codes/basic_data_type.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > 1 # 整数
+   > 0x10 # 16進数
+   > 0b10 # 2進数
+   > 1.0  # 実数
+   > :atom # アトム
+   > {1,2,3} # タプル
+   > [1,2,3] # リスト
+   > %{key1: 1, key2: 2} # マップ
 
 .. _関数:
 
@@ -23,9 +30,12 @@
 ときには、変数と引数をドットで区切ります。無名関数の定義方法は、fn()
 -> body endになります。
 
-.. literalinclude:: ../codes/function_object.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > add = fn(a,b) -> a + b end # 無名関数をaddという名前の変数に束縛
+   > add(1, 2) # addという名前の関数は存在しないのでエラー
+   > add.(1, 2) # 変数addに束縛されている関数に引数を与えて実行
+
 
 関数に渡す引数の数をアリティと呼びます。
 
@@ -41,12 +51,17 @@
 プルは複雑な構造を記述する際の中心となる構造です。タプルの最初の要素を
 そのタプルの内容を表すアトムにする方法はよくとられます。
 
-.. literalinclude:: ../codes/tuple_data_type.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > {:item1, :item2}
+   > {}
+   > a = {:uname, "netbsd", "i386", "smp"}
+   > elem a, 1
+   > set_elem a, 1, "freebsd"
 
 elem/2により内部の要素を取得できます。また、set_elem/3により一部の要素
 を変更した新しいタプルを作成することができます。要素の位置は0始まりです。
+
 
 リスト
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,6 +73,46 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
 数が決められない場合にはリストを使います。タプルとリストを組み合わせる
 事で任意のデータ構造を記述できます。
 
+キーワードリスト
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+キーワードリストとはタプルのリストの一種で基本の型ではありませんが、
+極めてよく登場します。タプルは2要素で最初の要素はアトムでなくては
+なりません。
+
+.. runblock:: iex
+
+   > a = [{:a => 1}, {:b => 2}]
+   > a[:a]
+   > Keyword.put(a, :b, 3)
+
+
+マップ
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+マップは他の言語ではハッシュと呼ばれることが多い型で、V0.13から導入され
+た新しい型です。 [#map_since_erlang_r17]_ マップの値の取り出しはブラケッ
+ト[]またはドット.で行い、値の設定はMap.put/3で行いますが、既存のキーに
+対する更新については%{変数 | キー => 値}という記法も使えます。
+
+現在のところはキーは任意の型が使えますが、%{}記法ではキーに変数を
+使うことができません。キーに変数を使う場合にはMap.put/3を使います。
+
+.. runblock:: iex
+
+   > a = %{:key1 => 1, :key2 => 2}
+   > b = Map.put(a, :key3, 3)
+   > %{a | :key2 => 5} # 既存のキーに対してカジュアルな変更が出来る
+   > %{a | :key3 => 3} # 存在しないキーはエラーになる
+   > a[:key1]          # 取り出しは[]で可能
+   > a.key1          # キーがアトムなら取り出しは.キーでも可能
+   > c = "key4"        
+   > a = %{:key1 => 1, "key4" => 0}
+   > %{a | c => 4}       # 変数のキーはエラーになる
+   > Map.put(a, c, 4)    # Map.put/3を使えば変数のキーも大丈夫
+
+
+
 二種類の文字列
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -65,18 +120,37 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
 はunicode文字(ucs2)のリスト [#erlang_string]_ になり、両者は全く違います。
 :binary.bin_to_list/1 により文字列をリストに変換するとUTF-8のバイトのリストとな
 るため、違いが明らかになります。UTF-8のバイナリをunicode文字のリストに
-変換するためには、String.to_char_list/1を使います。
+変換するためには、List.from_char_data/1を使います。
 
-.. literalinclude:: ../codes/binary_and_list.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > list='abc'
+   > bin="abc"
+   > [h|t]=list
+   > t
+   > h
+   > list==bin
+   > list2='あいうえお'
+   > bin2="あいうえお"
+   > :binary.bin_to_list(bin2)
+   > List.from_char_data(bin2)
+
 
 これらのバイナリやリストの文字列を他の文字列に埋め込む事もできます。ど
 ちらのタイプかはis_binary/1やis_list/1を使用して調べることができます。
 
-.. literalinclude:: ../codes/embedd_to_literal.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > bin="abc"
+   > list='abc'
+   > "embedd #{bin}"
+   > 'embedd #{list}'
+   > 'embedd binary into list #{bin}'
+   > "embedd list into binary #{list}"
+   > is_binary(bin)
+   > is_binary(list)
+   > is_list(bin)
+   > is_list(list)
 
 既に登場していますが、trueとfalseも存在します。is_boolean/1で判定できま
 す。
@@ -90,9 +164,17 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
 
 数値に関しては、通常の四則演算子が利用できます。
 
-.. literalinclude:: ../codes/arithmetic_operations.lst
-   :language: elixir
-   :linenos:
+
+.. runblock:: iex
+
+   > 1+2
+   > 1-2
+   > 1.0+1.0
+   > 2*3
+   > 12/4
+   > 12/5
+   > div(11,5)
+   > rem(11,5)
 
 
 リスト演算子
@@ -100,9 +182,12 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
 
 リストに対して、++と--が用意されていて、リストの結合と差分をとることができます。[#erlang_list_operation]_
 
-.. literalinclude:: ../codes/list_operations.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > [1,2,3] ++ [4,5,6]
+   > [1,2,3] -- [2,3]
+   > [1,2,3] -- [4]
+   > [1,2,3] -- [3,1]
 
 
 バイナリ(文字列)演算子
@@ -111,10 +196,10 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
 単一引用符の文字列はリストなので、結合と差分をとることができますが、二重引用符の文字列(バイナリ)ではそんなことは出来ません。そのかわり'<>
  'という結合演算子が使えます。
 
-.. literalinclude:: ../codes/binary_operations.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
 
+   > "binary" ++ "bin"  # '++'は使えない
+   > "binary" <> "bin"
 
 .. _論理演算子:
 
@@ -129,9 +214,21 @@ elem/2により内部の要素を取得できます。また、set_elem/3によ�
    :language: elixir
    :linenos:
 
+.. runblock:: iex
+
+   > true or false
+   > false and is_binary("abc")
+   > 1 and 2
+   > 1 and false
 
 or や and はショートカット演算子ですので、全体を評価しなくても値が決ま
 る場合には、評価されないことがあります。[#erlang_andalso_orelse]_
+
+.. runblock:: iex
+
+   > true or error("This error will never be raised")
+   > false and error("This error will never be raised")
+
 
 比較演算子
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,16 +236,18 @@ or や and はショートカット演算子ですので、全体を評価しな
 通常の比較演算子==, !=, ===, !===, <=, >=, <, >も用意されています。==と
 ===は整数と浮動小数点数をより厳密に区別することが異なります。
 
-.. literalinclude:: ../codes/equivalent.lst
-   :language: elixir
-   :linenos:
+
+.. runblock:: iex
+
+   > 1.0 == 1
+   > 1.0 === 1
 
 
 比較に関しては、異なる型でも順序関係が定義されています。
 
-.. literalinclude:: ../codes/order_of_types.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > 1 < :a < fn() -> :a end < {1,2} < 'abc' < "abc"
 
 
 リファレンス(一意のシンボル)やポート(elixirと外部プログラムのインタフェース)、pid(elixirプロセスの識別子)を含めてすべての型の順序は以下のとおりです。
@@ -167,24 +266,15 @@ or や and はショートカット演算子ですので、全体を評価しな
 || , &&, ! を用意しています。それらの演算子は falseとnil以外のすべての
 値をtrueに評価します。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> 0 || 1
-    0
-    iex> nil || 1
-    1
-    iex> false || 1
-    1
-    iex> 0 && 1
-    1
-    iex> 2 && 1
-    1
-    iex> 2 && nil
-    nil
-    iex> 2 && false
-    false
-    iex> 
+   > 0 || 1
+   > nil || 1
+   > false || 1
+   > 0 && 1
+   > 2 && 1
+   > 2 && nil
+   > 2 && false
 
 
 cons演算子
@@ -192,10 +282,9 @@ cons演算子
 
 cons("|")は二つの値からリストを作成する(constructor)演算子です。通常は
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    newlist = [:a | [:b, :c]] # newlist #-> [:a, :b, :c]
+   > newlist = [:a | [:b, :c]] 
 
 のように使います。
 
@@ -206,9 +295,11 @@ in演算子
 じ事は :lists.member/2 などを使用すれば記述できますが、こちらの方がすっき
 りと記述することができます。
 
-.. literalinclude:: ../codes/in_operator.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > y = 3
+   > y in [1,2,3]
+   > Enum.any?([1,2,3], fn(x) -> x == y end)
 
 
 関数呼び出し
@@ -227,64 +318,57 @@ ErlangはOTP(Open Telecom Platform)と呼ばれるライブラリ群とともに
 モジュール名はアトムとしてelixirでは扱っているので、例えばErlangの
 listsモジュールの関数reverse/1を呼び出すためには以下のようにします。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> :lists.reverse([1,2,3])
-    [3, 2, 1]
+   > :lists.reverse([1,2,3])
+
 
 パターンマッチ
 -------------------------------------
 
 関数型言語ではおなじみのパターンマッチも使えます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> [h | t] = [1,2,3]
-    [1,2,3]
-    iex> h
-    1
-    iex> t
-    [2,3]
-    iex>
+   > [h | t] = [1,2,3]
+   > h
+   > t
 
 elixirでは=は代入ではなく、パターンマッチ演算子になります。パターンに変
 数がある場合には、できる限りマッチさせるように変数に値が束縛されます。
 どうやっても無理の場合には、エラーになります。
 
-.. literalinclude:: ../codes/bad_match.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > [x, x] = [1,2]
 
 束縛された変数は、再度束縛することができます。[#reassign]_
 
-.. literalinclude:: ../codes/rebinding.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > t = [2,3]
+   > t
+   > [1 | t] = [1,2,3,4]
+   > t
 
 
 変数の値を固定したままでパターンマッチをしたい場合も多々あります。そう
 いうときには、^演算子を使って変数の束縛を固定します。
 
-.. literalinclude:: ../codes/hat_operator1.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
 
+   > t = [2,3,4]
+   > [1|^t]=[1,2,3,4,5]
+   > [1|^t]=[1,2,3,4]
 
 elixirではアンダースコア変数(_)を代入しても使用しない変数として使います。
 [#under_score_variable]_ アンダースコア変数は必ずマッチしますが、参照す
 ることはできません。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> [1,_,3|_]=[1,2,3,4]
-    [1,2,3,4]
-    iex> _
-    ** (ErlangError) erlang error: {:unbound_var,:_}
-        :erl_eval.exprs/2
-    iex>
+   > [1,_,3|_]=[1,2,3,4]
+   > _
 
 キーワードリスト
 -------------------------------------
@@ -293,9 +377,12 @@ elixirではアンダースコア変数(_)を代入しても使用しない変�
 である[{:key1, value1}, {:key2, value2}]は[key1: value1, key2: value2]
 と書けます。これらへはKeywordモジュールでアクセスできます。
 
-.. literalinclude:: ../codes/keyword_list.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > x = [a: 1, b: 2]
+   > Keyword.get x, :a
+   > Keyword.get x, :b
+   > Keyword.get x, :c
 
 
 キーワード引数と括弧の省略
@@ -303,53 +390,43 @@ elixirではアンダースコア変数(_)を代入しても使用しない変�
 
 例えば、よく知られたif式は以下のように書きます。
 
-.. code-block:: elixir
-   :linenos:
-
-    iex> if(true,[do: 1+1]) 
-    2
-    iex> if(false,[do: 1+1])
-    nil
-    iex> 
+.. runblock:: iex
+   
+   > if(true, [do: 1+1])
+   > if(false, [do: 1+1])
 
 すなわち、do:キーリストを引数とした2変数関数で、第一引数がtrueの場合に、
 do:キーの値を評価して返すということになります。そして、関数呼び出しは括
 弧を省略できます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
+   
+   > if true, [do: 1+2]
 
-    iex> if true, [do: 1+2]
-    3
 
 さらに、最後の引数がキーワードリストの場合、カギ括弧も省略できます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
+   
+   > if true, do: 1+2
 
-    iex> if true, do: 1+2  
 
 if関数は第一引数がfalseの場合はelse:キーがあれば、それを評価します。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> if( true, [do: 1, else: 2 ] )
-    1
-    iex> if( false, [do: 1, else: 2 ] )  
-    2
+   > if( true, [do: 1, else: 2 ] )
+   > if( false, [do: 1, else: 2 ] )  
 
 do:やelse:の中が複数行とする場合、ブロック記法が使えます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> if true do
-    ...> 1
-    ...> else
-    ...> 2
-    ...> end
-    1
+   > if true do
+   > 1
+   > else
+   > 2
+   > end
 
 実は、ifはプリミティブではなく、マクロでelixirのKernelモジュールで実装
 されています。
@@ -431,34 +508,32 @@ match_patternにマッチしてかつ、when句がtrueの場合にマッチし�
     * is_function/2
     * is_integer/1
     * is_list/1
+    * is_map/1
     * is_number/1
     * is_pid/1
     * is_port/1
-    * is_record/2
-    * is_record/3
     * is_reference/1
     * is_tuple/1
-    * is_exeption/1
 
 その他の関数 基本的な物を中心に利用可能な関数がいくつかあります。
 
-    * abs(Number)
-    * bit_size(Bitstring)
-    * byte_size(Bitstring)
-    * div(Number, Number)
-    * elem(Tuple, n)
-    * fload(Term)
-    * hd(List)
-    * length(List)
+    * abs(number)
+    * bit_size(bitstring)
+    * byte_size(bitstring)
+    * div(integer, integer)
+    * elem(tuple, n)
+    * hd(list)
+    * length(list)
+    * map_size(map)
     * node()
-    * node(Pid|Ref|Port)
-    * rem(Number, Number)
-    * round(Number)
+    * node(pid|ref|port)
+    * rem(integer, integer)
+    * round(number)
     * self()
-    * size(Tuple|Bitstring)
-    * tl(List)
-    * trunc(Number)
-    * tuple_size(Tuple)
+    * size(tuple|bitstring)
+    * tl(list)
+    * trunc(number)
+    * tuple_size(tuple)
 
 ガード式を複数記述することが出来ますがその場合は、いずれかのガード式が
 trueだった場合にマッチパターンを評価します。
@@ -468,10 +543,23 @@ if
 
 ifは最大2分岐の時に使用します。doブロックとキーワードリストの書き方があります。いわゆるelsifはありません。
 
-.. literalinclude:: ../codes/if_syntax.lst
-   :language: elixir
-   :linenos:
 
+.. runblock:: iex
+   
+   > x = 1
+   > if x == 1, do: :one, else: :not_one
+   > if x == 1 do
+   >   :one
+   > else 
+   >   :not_one
+   > end
+   > x = 2
+   > if x == 1, do: :one, else: :not_one
+   > if x == 1 do
+   >   :one
+   > else 
+   >   :not_one
+   > end
 
 case 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -481,53 +569,54 @@ case
 に値を調整可能な場合には、その値に束縛され直します。ここは=と同様ですが、
 関数型言語の多くが単一代入であることと異なっています。
 
-.. literalinclude:: ../codes/case_syntax.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
 
+   > x = 1
+   > case [1,2,3] do
+   >   [1,2,x] -> x
+   >   x -> x
+   >    _ -> 0
+   > end
+   > case [1,2,3] do
+   >   x -> x
+   >   [1,x,3] -> x
+   >   _ -> 0
+   > end
 
 再束縛をしてほしくない場合には、=の時と同様に^演算子を用います。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> x = 4
-    iex> case [1,2,3] do
-    ...> [1,x,3] ->
-    ...> x
-    ...> x ->
-    ...> x
-    ...> _ ->
-    ...> x
-    ...> end
-    2
-    iex> x
-    2
-    iex> x = 4          
-    4
-    iex> case [1,2,3] do
-    ...> [1,^x,3] ->
-    ...> x              
-    ...> x ->
-    ...> x
-    ...> _ ->
-    ...> 0
-    ...> end
-    4
-    iex> 
+   > x = 4
+   > case [1,2,3] do
+   > [1,x,3] ->
+   >   x
+   > x ->
+   >   x
+   > _ ->
+   >   x
+   > end
+   > x
+   > x = 4          
+   > case [1,2,3] do
+   > [1,^x,3] ->
+   >   x              
+   > x ->
+   >   x
+   > _ ->
+   >   0
+   > end
 
 パターンにはガード式を使う事もできます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> case [1,2,3] do           
-    ...> [1,x,3] when x > 0 ->
-    ...> x
-    ...> x ->
-    ...> x
-    ...> end
-    2
+   > case [1,2,3] do           
+   > [1,x,3] when x > 0 ->
+   >   x
+   > x ->
+   >   x
+   > end
 
 ガード式は、型チェックや論理演算子など、組み込み演算子と関数のみが使え
 ます。 [#erlang_guard]_ 
@@ -538,13 +627,24 @@ cond
 condは記述された順序で複数の式の検査を行い、最初にtrueと評価された節が
 実行されます。
 
-.. literalinclude:: ../codes/cond_syntax.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
 
+   > x = 4
+   > cond do
+   > 2 + x == 5 ->
+   >   "x is 3"
+   > 2 * x == 8 ->
+   >   "x is 4"
+   > 1 * x == x ->
+   >   "x == any"
+   > end
 
 例外
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+例外については後で書く。
+
+例外はモジュールである。
 
 
 
@@ -557,46 +657,37 @@ condは記述された順序で複数の式の検査を行い、最初にtrueと
 :ref:`関数` で説明したように、定義はfn()->...endで行い、 =などで変数へ束
 縛するか、直接.演算子で使用することができます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-   iex> (fn(x) -> x*2 end).(3)
-   6
-   iex> 
+   > (fn(x) -> x * 2 end).(3)
 
-複雑な関数は以下のfn() do...endフォーマットで定義する事もできます。
 
-.. code-block:: elixir
-   :linenos:
+複雑な関数は改行を入れてもかまいません。
 
-   iex> (fn(x) do
-   ...> x*2      
-   ...> end).(3) 
-   6
-   iex> 
+.. runblock:: iex
+
+   > (fn(x) ->
+   >   x * 2
+   > end).(3)
 
 また、&構文を使って定義することもできます。&()がfn...endのかわりで、
 &nが仮引数になります。
 
-.. code-block:: elixir
-   :linenos:
 
-   iex> (&(&1*2)).(3)
-   6
-   iex> 
+.. runblock:: iex
+
+   > (&(&1 * 2)).(3)
 
 関数内で使用される自由変数に対する変更はシャドウされます。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-   iex> (fn do 
-   ...> x = 2  
-   ...> [x,x=3]
-   ...> end).()
-   [2,3]
-   iex> x
-   1
+   > x = 1
+   > (fn()->
+   > x = 2  
+   > [x,x=3]
+   > end).()
+   > x
 
 
 receive
@@ -617,11 +708,18 @@ receive
 ペレータ<-を使用し、receiveを使ってmailboxからメッセージを取得する例を
 示します。
 
-.. literalinclude:: ../codes/receive_syntax.lst
-   :language: elixir
-   :linenos:
 
+.. runblock:: iex
 
+   > current_pid = self # 現在のプロセスのpidを取得
+   > spawn fn ->        # プロセスを起動して、メッセージを送信する
+   >   send current_pid, { :hello, self }
+   >   :ok
+   > end 
+   > receive do          # メッセージを受信する
+   > { :hello, pid } ->
+   >   IO.puts "Hello from #{inspect(pid)}"
+   > end
 
 モジュール
 -------------------------------------
@@ -639,21 +737,14 @@ elixirで新しいモジュールを作成するためには、”defmodule”�
 
 iexから対話的に実行するとこうなります。
 
-.. code-block:: elixir
-   :linenos:
+.. runblock:: iex
 
-    iex> Hello.world
-    Hello, world
-    :ok
-    iex> defmodule Math do
-    ...> def sum(a,b) do
-    ...>  a + b
-    ...> end
-    ...> end
-    {:sum, 2}
-    iex> Math.sum(1,2)
-    3
-    iex> 
+   > defmodule Math do
+   >   def sum(a,b) do
+   >     a + b
+   >   end
+   > end
+   > Math.sum(1,2)
 
 モジュールの中では以下の定義が可能です。
 
@@ -721,7 +812,7 @@ aliasは与えられたモジュールを参照する為の別名をセットア
    :linenos:
 
     defmodule Math do
-      require MyOrddict, as: Orddict 
+      alias MyOrddict, as: Orddict 
     end
 
 これで任意の”Orddict”への参照が自動的に”MyOrddict”に置き換わります。
@@ -736,6 +827,29 @@ aliasは与えられたモジュールを参照する為の別名をセットア
 
 (実際はelixirの全てのモジュールはElixirというモジュールのサブモジュール
 になっています)
+
+aliasはレキシカルスコープですので特定の関数の内側でだけaliasをセットアップ
+することができます。
+
+.. runblock:: iex
+
+   > defmodule Group do
+   >   def direct_product(a, b) do
+   >     alias :lists, as: MyList
+   >     for x <- MyList.seq(1, a),
+   >         y <- MyList.seq(1, b) do
+   >         {x, y}
+   >     end
+   >   end
+   >   def product(a, b) do            # MyListはここではaliasから外れている
+   >     for x <- MyList.seq(1, a),
+   >         y <- MyList.seq(1, b) do
+   >         {x, y}
+   >     end
+   >   end
+   > end
+   > Group.direct_product(3, 4)
+   > Group.product(3, 4)                # エラーとなる
 
 require
 `````````````````````````````````````
@@ -825,6 +939,8 @@ use
     end
 
 .. rubric:: 脚注
+.. [#map_since_erlang_r17] Erlang/OTP R17で導入され、Elixirでも利用
+                              できるようになりました。
 .. [#nil_is_not_nul_list] Lispと異なり、nilと[]は異なります
 .. [#erlang_binary] Erlangのバイナリ
 .. [#erlang_string] Erlangの文字列

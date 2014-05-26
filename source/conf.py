@@ -18,7 +18,7 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('.'))
-extensions = ['japanesesupport', 'その他の拡張']
+extensions = ['japanesesupport', 'exts', 'その他の拡張']
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -26,7 +26,23 @@ extensions = ['japanesesupport', 'その他の拡張']
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.mathjax', 'sphinx.ext.graphviz']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.mathjax', 'sphinx.ext.graphviz', 'sphinxcontrib.autorun']
+
+autorun_languages = {}
+autorun_languages['gnuplot'] = 'gnuplot'
+autorun_languages['citty'] = "bash mm"
+#autorun_languages['citty'] = 'tee log'
+autorun_languages['citty_input_encoding'] = 'utf-8'
+autorun_languages['citty_output_encoding'] = 'utf-8'
+autorun_languages['citty_prefix_chars'] = 0
+autorun_languages['citty_show_source'] = False
+
+autorun_languages['iex'] = "source/exts/citty/src/citty -f2 -b iex"
+autorun_languages['iex_input_encoding'] = 'utf-8'
+autorun_languages['iex_output_encoding'] = 'utf-8'
+autorun_languages['iex_prefix_chars'] = 0
+autorun_languages['iex_show_source'] = False
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -36,6 +52,7 @@ source_suffix = '.rst'
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
+source_encoding = 'utf-8-sig'
 
 # The master toctree document.
 master_doc = 'index'

@@ -2,7 +2,7 @@
 current_pid = self
 # Spawn another process that will send a message
 spawn fn -> 
-  current_pid <- { :hello, self }
+  self current_pid, { :hello, self }
 end
 # Collect the message
 receive do
