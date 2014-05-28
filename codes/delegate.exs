@@ -9,7 +9,7 @@ defmodule MyMacro do
   defp delegate_1m([{fname, arity} | t], to: module) do
     args = makeargs(arity)
     e = quote do
-      def unquote(fname).(unquote_splicing(args)) do
+      def unquote(fname)(unquote_splicing(args)) do
         apply unquote(module), unquote(fname), [unquote_splicing(args)]
       end
     end
@@ -26,7 +26,7 @@ defmodule MyMacro do
       Enum.map(fn({fname, arity}) ->
                    args = makeargs(arity)
                    quote do
-                     def unquote(fname).(unquote_splicing(args)) do
+                     def unquote(fname)(unquote_splicing(args)) do
                        apply unquote(module), unquote(fname), [unquote_splicing(args)]
                      end
                    end
@@ -37,5 +37,3 @@ defmodule MyModule do
   require MyMacro
   MyMacro.delegate_1 [member?: 2, reverse: 1], to: Enum
 end
-MyModule.member?([1,2,3], 3)
-MyModule.reverse([1,2,3])

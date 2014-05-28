@@ -36,7 +36,7 @@ Blankプロトコルで、blank?/1関数をサポートする事を要求する�
    > c("codes/blank.ex")
    > Blank.blank?([])
    > Blank.blank?([1])
-   > Blank.blank?(1)
+   > Blank.blank?(1)  # これはエラー
 
 のようになり、Listについてはblank?が機能していますが、blank?(1)は
 怒られました。しかたないのでInteger型についても実装を定義してみます。
@@ -52,7 +52,6 @@ Blankプロトコルで、blank?/1関数をサポートする事を要求する�
 このように整数についてもblank?/1が機能するようになりました。:forに使え
 る型は以下のとおりです。
 
-• Record
 
 • Tuple
 

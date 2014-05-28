@@ -49,42 +49,55 @@ quote do: 式 マクロを用いて任意の式のデータ構造表現を得る
    :language: elixir
    :linenos:
 
+.. runblock:: iex
+
+   > quote do: sum(1,2,3)
+   > quote do
+   >   sum(1,2,3)
+   > end
+
+
 elixirでは全ては関数呼び出しで、それは前述のタプルで表現できます。例えば、以下の様な演算子を含む式は以下の様になります。
 
-.. literalinclude:: ../codes/quote_do_plus.lst
-   :language: elixir
-   :linenos:
-   :lines: 2-3
+.. runblock:: iex
+
+   > quote do: 1 + 2
 
 3要素以上のタプルも"{}"関数になります。
 
-.. literalinclude:: ../codes/quote_do_plus.lst
-   :language: elixir
-   :linenos:
-   :lines: 4-7
+.. runblock:: iex
+
+   > quote do: { 1, 2}
+   > quote do: { 1, 2, 3}
 
 
 このルールの例外はたった五つのElixirリテラルだけです。リテラルはquoteさ
 れるとそれ自身を返すデータ型で、それらは以下のとおりです:
 
-.. literalinclude:: ../codes/quote_literal.lst
-   :language: elixir
-   :linenos: 
-   :lines: 2-11
+.. runblock:: iex
+
+   > quote do: :atom # atom
+   > quote do: 2.0 # number
+   > quote do: [1, 2, 3] # list
+   > quote do: "binary" # binary
+   > quote do: {:key,  :value} # 2 element tuple
 
 また、変数は、Elixirという印がついたアトムのタプルになります。
 
-.. literalinclude:: ../codes/quote_literal.lst
-   :language: elixir
-   :linenos: 
-   :lines: 12-15
+.. runblock:: iex
+
+   > x=1
+   > quote do: x
 
 doブロックは:__block__関数になります。
 
-.. literalinclude:: ../codes/quote_literal.lst
-   :language: elixir
-   :linenos: 
-   :lines: 16-20
+.. runblock:: iex
+
+   > quote do
+   >   1
+   >   2
+   > end
+
 
 これでユーザ定義のマクロを定義する準備ができました。Doug HoyteはLet
 Over Lambdaで「他のすべての言語が単にLispに薄い皮をかぶせたにすぎないと
@@ -109,23 +122,16 @@ Over Lambdaで「他のすべての言語が単にLispに薄い皮をかぶせ�
 上の例では、unlessは二つの引数を受けて呼ばれます。
 “clause”と”options”です。しかし、unlessはそれらの値を受け取る訳では
 なく、式を受け取る点に注意してください。例えば、次の呼び出しでは、
+2 + 2 == 5 という式が評価されずに渡されています。
 
-.. literalinclude:: ../codes/defmacro_unless.exs
-   :language: elixir
-   :linenos: 
-   :lines: 9
+.. runblock:: iex
 
-MyMacro.unlessは以下の物を受け取ることになります。
-
-.. code-block:: elixir
-   :linenos:
-
-    MyMacro.unless({:==, [context: Elixir, import: Kernel],
-                    [{:+, [context: Elixir, import: Kernel], [2, 2]}, 5]},
-                   [do: {{:.,[], [{:__aliases__, [alias: false], [:IO]}, 
-                                  :puts]}, [],
-                                  ["unless"]}])
-
+   > c("codes/defmacro_unless.exs")
+   > require MyMacro
+   > MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
+   > IO.puts Macro.to_string Macro.expand_once(quote do
+   >                     MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
+   >                   end, __ENV__)
 
 MyMacro.unless側では、ifのツリー構造を返す為に"quote"を呼びます。
 これは"if"で我々の"unless"をトランスレートしていることを意味します。
@@ -139,10 +145,13 @@ MyMacro.unless側では、ifのツリー構造を返す為に"quote"を呼びま
 
 これをコンパイルして呼び出すとこのようになります。
 
-.. literalinclude:: ../codes/defmacro_unless_fail.lst
-   :language: elixir
-   :linenos: 
-   :lines: 18-23
+.. runblock:: iex
+
+   > c("codes/defmacro_unless_fail.exs")
+   > require MyMacro;
+   > IO.puts Macro.to_string Macro.expand_once(quote do
+   >                           MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
+   >                         end, __ENV__)
 
 unquoteが無いバージョンではclauseとoptionsという関数を呼び出すようになっ
 ていることに注意してください。
@@ -152,9 +161,9 @@ unquoteが無いバージョンではclauseとoptionsという関数を呼び出
 elixiではリストをunquoteして、もとの式のリスト中に差し込むことを一度にする
 unquote_splicing/1も提供しています。
 
-.. literalinclude:: ../codes/unquote_splicing.lst
-   :language: elixir
-   :linenos: 
+.. runblock:: iex
+
+   > quote do: [1, unquote_splicing([2,3,4]), 5]
 
 elixirで提供されているビルトインマクロのオーバーライドを含めて、欲しい
 と思う任意のマクロを定義することができます。elixirスペシャルフォームの
@@ -168,21 +177,32 @@ elixirマクロはScheme協定に従っていて、健全(hygienic)です。こ�
 の内側で定義された変数はマクロが使われたコンテキストで定義された変数と
 衝突しないという事を意味します。例えば
 
-.. literalinclude:: ../codes/hygiene.lst
-   :language: elixir
-   :linenos:
-   :lines: 1-17
+.. runblock:: iex
+
+   > defmodule Hygiene do
+   >   defmacro testmacro do
+   >     quote do: a = 1
+   >   end
+   > end
+   > a = 10
+   > require Hygiene; Hygiene.testmacro
+   > a  ## マクロによって変更されない
 
 
 このように、testmacroの内部でaに1を束縛しても、それは外部に影響を及ぼし
 ません。マクロでコンテキストに影響を与えたい場合は、 var!()を使うことが
 できます:
 
-.. literalinclude:: ../codes/hygiene.lst
-   :language: elixir
-   :linenos:
-   :lines: 18-33
+.. runblock:: iex
 
+   > defmodule Hygiene2 do
+   >   defmacro testmacro do
+   >     quote do: var!(a) = 1
+   >   end
+   > end
+   > a = 10
+   > require Hygiene2; Hygiene2.testmacro
+   > a  ## 今度は変更される
 
 var!()によってマクロが展開された場所のコンテキストで変数が
 評価されることが分ります。
@@ -192,26 +212,43 @@ var!()によってマクロが展開された場所のコンテキストで変�
 なります。これらがASTを返しますが、これらをelixirのシンタックスに
 文字列として変換する、Macro.to_string/1もあります。
 
-.. literalinclude:: ../codes/defmacro_unless.lst
-   :language: elixir
-   :linenos:
-   :lines: 19-54
+.. runblock:: iex
+
+   > c("codes/defmacro_unless.exs")
+   > require MyMacro;
+   > MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
+   > m = Macro.expand_once(quote do
+   >                    MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
+   >                  end, __ENV__)
+   > IO.puts Macro.to_string(m)
+   > m = Macro.expand(quote do
+   >                    MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
+   >                  end, __ENV__)
+   > IO.puts Macro.to_string(m)
+
 
 これまでquoteを使ってきましたが、直接ASTを構成するタプルを返して
 マクロを作ることもできます。たとえば、引数を2倍するマクロを作ってみます。
 :"+" 関数に引数を渡すplus/1マクロを書いてみます。
 
-.. literalinclude:: ../codes/defmacro_plus.lst
-   :language: elixir
-   :linenos:
+.. runblock:: iex
+
+   > defmodule MyMacro do
+   >   defmacro plus(x) do
+   >     {:"+", [], [x, x]}
+   >   end
+   > end
+   > require MyMacro
+   > MyMacro.plus(4)
+   > IO.puts Macro.to_string(Macro.expand(quote do
+   >                                        MyMacro.plus(4)
+   >                                      end, __ENV__))
 
 一見上手く動いているように見えますが、微妙なバグがあります。
-
 
 quoteを使っていないので、unquoteも使う必要はありません。このような単純
 な場合にはquoteを使うほうが遥かに楽ですが、複雑な式の変換を行う際には
 直接ASTをハンドルする必要が出て来ます。
-
 
 
 プライベートマクロ
@@ -221,18 +258,35 @@ quoteを使っていないので、unquoteも使う必要はありません。�
 内でのみ呼び出しが可能です。プライベートマクロはガード式など
 関数呼びだしが許されない場所で良く使われます。
 
-.. literalinclude:: ../codes/private_macro.exs
-   :language: elixir
-   :linenos: 
-   :lines: 1-10
+.. runblock:: iex
+   
+   > defmodule MyMacro do
+   >   defmacrop is_even(x) do
+   >     quote do
+   >       rem(unquote(x), 2) == 0
+   >     end
+   >   end
+   >   def add_even(a, b) when is_even(a) and is_even(b) do
+   >     a + b
+   >   end
+   > end
 
 プライベートマクロは前方参照を許していませんので、定義するまえに使うと
 エラーとなります。
 
-.. literalinclude:: ../codes/private_macro.lst
-   :language: elixir
-   :linenos: 
-   :lines: 18-44
+.. runblock:: iex
+   
+   > defmodule MyMacro2 do
+   >   def add_even(a, b) when is_even(a) and is_even(b) do
+   >     a + b
+   >   end
+   >   defmacrop is_even(x) do
+   >     quote do
+   >       rem(unquote(x), 2) == 0
+   >     end
+   >   end
+   > end
+
 
 マクロの実際
 -------------------------------------
@@ -309,7 +363,8 @@ delegate1は渡された最初の{fname, arity}のみ処理しているので、
 
 実行結果は以下のとおりです。
 
-.. literalinclude:: ../codes/delegate.lst
-   :language: elixir
-   :linenos: 
-   :lines: 42-55
+.. runblock:: iex
+
+   > c("codes/delegate.exs")
+   > MyModule.member?([1,2,3], 3)
+   > MyModule.reverse([1,2,3])
