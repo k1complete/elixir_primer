@@ -12,6 +12,8 @@ Elixir Primer
    :maxdepth: 2
 
    introduction
+
+
    syntax
    map_and_struct
    record_and_protocol

@@ -12,7 +12,7 @@ elixirは関数を便利に使うための構文をサポートしています�
 .. runblock:: iex
 
    > list = ["foo", "bar", "baz"]
-   > Enum.map list, fn(x) -> size(x) end
+   > Enum.map list, fn(x) -> byte_size(x) end
 
 
 このようにも書くことができます。
@@ -20,7 +20,7 @@ elixirは関数を便利に使うための構文をサポートしています�
 .. runblock:: iex
 
    > list = ["foo", "bar", "baz"]
-   > Enum.map list, &size(&1)
+   > Enum.map list, &byte_size(&1)
 
 
 上の例の&size(&1)はfn(x) -> size(x) endに直接変換されます。演算子もまた

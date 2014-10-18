@@ -2,7 +2,7 @@ defmodule MyMacro do
   defp makeargs(arity) do
     1..arity |> 
          Enum.map(fn(x) ->
-                    arg = binary_to_atom("arg#{x}")
+                    arg = String.to_atom("arg#{x}")
                     {arg, [], Elixir}
                   end)
   end

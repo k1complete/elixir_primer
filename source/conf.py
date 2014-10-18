@@ -30,13 +30,13 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sp
 
 autorun_languages = {}
 autorun_languages['gnuplot'] = 'gnuplot'
-autorun_languages['bash'] = "ext/citty/src/citty -f10 -b bash -i"
+autorun_languages['bash'] = "ext/citty/src/citty -f3  bash -i"
 autorun_languages['bash_input_encoding'] = 'utf-8'
 autorun_languages['bash_output_encoding'] = 'utf-8'
 autorun_languages['bash_prefix_chars'] = 0
 autorun_languages['bash_show_source'] = False
 
-autorun_languages['iex'] = "ext/citty/src/citty -f10 -b iex"
+autorun_languages['iex'] = "ext/citty/src/citty -b3 -f3 iex -e IEx.configure([{:colors,[{:enabled,false}]}])"
 autorun_languages['iex_input_encoding'] = 'utf-8'
 autorun_languages['iex_output_encoding'] = 'utf-8'
 autorun_languages['iex_prefix_chars'] = 0

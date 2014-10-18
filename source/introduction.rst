@@ -48,12 +48,12 @@ rubyライクの構文を持つlispです。
 elixirはerlang/OTPのバージョン17かそれ以降が必要ですので、
 www.erlang.orgからダウンロードしてインストールしておきます。erlang/OTP
 のインストール後、elixirをビルド・インストールします。elixirは、
-https://github.com/josevalim/elixir から入手できます。2014年6月時点の最
-新版は0.13.2で2011年12月にリリースされた0.4.0から強力なマクロを備えた言
+https://github.com/josevalim/elixir から入手できます。2014年10月時点の最
+新版は1.0.1で2011年12月にリリースされた0.4.0から強力なマクロを備えた言
 語に生まれ変わりました。それ以前のelixirはreiaと同様にerlang上で動作す
 るruby類似のオブジェクト指向言語でした。
 
-.. runblock:: bash
+.. code-block:: bash
 
     $ elixir --version
 
@@ -92,7 +92,6 @@ rubyなどを知っていれば受け入れやすい文法と構造になって�
 
 .. runblock:: bash
 
-   $ elixir codes/hello.exs
-
+   $ elixir hello.exs
 
 
