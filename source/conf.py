@@ -36,7 +36,8 @@ autorun_languages['bash_output_encoding'] = 'utf-8'
 autorun_languages['bash_prefix_chars'] = 0
 autorun_languages['bash_show_source'] = False
 
-autorun_languages['iex'] = "ext/citty/src/citty -b3 -f3 iex -e IEx.configure([{:colors,[{:enabled,false}]}])"
+#autorun_languages['iex'] = "ext/citty/src/citty -b3 -f3 iex -e citty.exs"
+autorun_languages['iex'] = "ext/citty/src/citty -b3 -f3 iex -r mm.exs"
 autorun_languages['iex_input_encoding'] = 'utf-8'
 autorun_languages['iex_output_encoding'] = 'utf-8'
 autorun_languages['iex_prefix_chars'] = 0

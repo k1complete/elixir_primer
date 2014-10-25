@@ -1,4 +1,4 @@
-defmodule MyMacro do
+defmodule UnlessFail do
   defmacro unless(clause, options) do
     quote do
       if !clause, options

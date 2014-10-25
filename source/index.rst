@@ -17,6 +17,7 @@ Elixir Primer
    syntax
    map_and_struct
    record_and_protocol
+   protocol_enumerable
    partial_application
    metaprogramming
    using_std_library

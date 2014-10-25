@@ -1,4 +1,4 @@
-defmodule MyMacro do
+defmodule Delegate do
   defp makeargs(arity) do
     1..arity |> 
          Enum.map(fn(x) ->
@@ -33,7 +33,7 @@ defmodule MyMacro do
                end)
   end
 end
-defmodule MyModule do
-  require MyMacro
-  MyMacro.delegate_1 [member?: 2, reverse: 1], to: Enum
+defmodule MyList do
+  require Delegate
+  Delegate.delegate_1 [member?: 2, reverse: 1], to: Enum
 end

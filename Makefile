@@ -48,7 +48,8 @@ help:
 
 clean:
 	rm -rf $(BUILDDIR)/*
-	(cd codes; $(MAKE) clean )
+	rm *.beam
+#	(cd codes; $(MAKE) clean )
 
 CITTY = ext/citty
 
@@ -63,7 +64,7 @@ $(CITTY)/src/citty:
 
 prep:	
 	echo ok
-
+		rm *.beam
 #	(cd codes; $(MAKE))
 
 html:	$(CITTY)/Makefile $(CITTY)/src/citty

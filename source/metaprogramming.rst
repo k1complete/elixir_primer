@@ -148,10 +148,10 @@ MyMacro.unless側では、ifのツリー構造を返す為に"quote"を呼びま
 .. runblock:: iex
 
    > c("codes/defmacro_unless_fail.exs")
-   > require MyMacro;
+   > require UnlessFail;
    > IO.puts Macro.to_string Macro.expand_once(quote do
-   >                           MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
-   >                         end, __ENV__)
+   >   UnlessFail.unless 2 + 2 == 5, do: IO.puts("unless")
+   > end, __ENV__)
 
 unquoteが無いバージョンではclauseとoptionsという関数を呼び出すようになっ
 ていることに注意してください。
@@ -214,7 +214,6 @@ var!()によってマクロが展開された場所のコンテキストで変�
 
 .. runblock:: iex
 
-   > c("codes/defmacro_unless.exs")
    > require MyMacro;
    > MyMacro.unless 2 + 2 == 5, do: IO.puts("unless")
    > m = Macro.expand_once(quote do
@@ -233,15 +232,15 @@ var!()によってマクロが展開された場所のコンテキストで変�
 
 .. runblock:: iex
 
-   > defmodule MyMacro do
+   > defmodule Plus do
    >   defmacro plus(x) do
    >     {:"+", [], [x, x]}
    >   end
    > end
-   > require MyMacro
-   > MyMacro.plus(4)
+   > require Plus
+   > Plus.plus(4)
    > IO.puts Macro.to_string(Macro.expand(quote do
-   >                                        MyMacro.plus(4)
+   >                                        Plus.plus(4)
    >                                      end, __ENV__))
 
 一見上手く動いているように見えますが、微妙なバグがあります。
@@ -260,7 +259,7 @@ quoteを使っていないので、unquoteも使う必要はありません。�
 
 .. runblock:: iex
    
-   > defmodule MyMacro do
+   > defmodule IsEven do
    >   defmacrop is_even(x) do
    >     quote do
    >       rem(unquote(x), 2) == 0
@@ -276,7 +275,7 @@ quoteを使っていないので、unquoteも使う必要はありません。�
 
 .. runblock:: iex
    
-   > defmodule MyMacro2 do
+   > defmodule IsEven do
    >   def add_even(a, b) when is_even(a) and is_even(b) do
    >     a + b
    >   end
@@ -291,16 +290,16 @@ quoteを使っていないので、unquoteも使う必要はありません。�
 マクロの実際
 -------------------------------------
 
-マクロ delegate [{name, arity}|t], do: target を考えてみます。これは、
+マクロ delegate [{name, arity} | t], do: target を考えてみます。これは、
 あるモジュールの関数群を他のモジュールに委譲したい場合に使う事を目的と
 しています。例えば、MyListという独自リストモジュールを定義していて
-reverse/1とmember/2を:listsモジュールをそのまま使いたい場合です。
+reverse/1とmember/2をEnumモジュールをそのまま使いたい場合です。
 
 .. code-block:: elixir
    :linenos:
 
     defmodule MyList do
-      delegate [reverse: 1, member: 2], to: :lists
+      delegate [reverse: 1, member: 2], to: Enum
     end
 
 これをこんなふうに展開されたいわけです。
@@ -366,5 +365,5 @@ delegate1は渡された最初の{fname, arity}のみ処理しているので、
 .. runblock:: iex
 
    > c("codes/delegate.exs")
-   > MyModule.member?([1,2,3], 3)
-   > MyModule.reverse([1,2,3])
+   > MyList.member?([1,2,3], 3)
+   > MyList.reverse([1,2,3])
